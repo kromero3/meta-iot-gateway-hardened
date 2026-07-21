@@ -58,19 +58,26 @@ meta-iot-gateway-hardened/
 
 ## Mesures de durcissement
 
-| # | Mesure | Mecanisme |
-|---|---|---|
-| 1 | Rootfs en lecture seule | `IMAGE_FEATURES += "read-only-rootfs"` |
-| 2 | Serveur SSH minimal | `IMAGE_FEATURES += "ssh-server-openssh"` |
-| 3 | Interdiction root SSH | `sshd_config`: `PermitRootLogin no` |
-| 4 | Utilisateur `admin` (groupe wheel) | `EXTRA_USERS_PARAMS` + `inherit extrausers` |
-| 5 | Compte `root` verrouille | `usermod -L root` |
-| 6 | Pare-feu iptables strict | Recette `firewall-config` + `update-rc.d` |
-| 7 | Flags de durcissement toolchain | `require conf/distro/include/security_flags.inc` |
-| 8 | Analyse CVE au build | `INHERIT += "cve-check"` |
+| # | Mesure | Mecanisme | Preuve |
+|---|---|---|---|
+| 1 | Rootfs en lecture seule | `IMAGE_FEATURES += "read-only-rootfs"` | [`03-touch-readonly`](docs/screenshots/03-touch-readonly.png) |
+| 2 | Serveur SSH minimal | `IMAGE_FEATURES += "ssh-server-openssh"` | [`02-login-admin-ok`](docs/screenshots/02-login-admin-ok.png) |
+| 3 | Interdiction root SSH | `sshd_config`: `PermitRootLogin no` | [`01-ssh-root-refuse`](docs/screenshots/01-ssh-root-refuse.png) |
+| 4 | Utilisateur `admin` (groupe wheel) | `EXTRA_USERS_PARAMS` + `inherit extrausers` | [`02-login-admin-ok`](docs/screenshots/02-login-admin-ok.png) |
+| 5 | Compte `root` verrouille | `usermod -L root` | [`01-ssh-root-refuse`](docs/screenshots/01-ssh-root-refuse.png) |
+| 6 | Pare-feu iptables strict | Recette `firewall-config` + `update-rc.d` | [`04-iptables-L-n`](docs/screenshots/04-iptables-L-n.png) |
+| 7 | Flags de durcissement toolchain | `require conf/distro/include/security_flags.inc` | inclus par defaut dans Poky (`meta-poky/conf/distro/poky.conf`) |
+| 8 | Analyse CVE au build | `INHERIT += "cve-check"` | [`05-cve-check-config`](docs/screenshots/05-cve-check-config.png) |
 
 Details techniques et justifications : voir
 [`docs/Rapport_Audit_Securite_IoT_Gateway.pdf`](docs/Rapport_Audit_Securite_IoT_Gateway.pdf).
+
+> **Note sur la mesure 6** : la sortie observee de `iptables -L -n` montre
+> `INPUT policy DROP` avec `lo` autorise, mais les regles specifiques
+> (`--dport 22`, `-m conntrack`) n'apparaissent pas car le kernel Yocto
+> `qemux86-64` par defaut ne compile pas les modules `xt_tcp` /
+> `xt_conntrack`. Le mecanisme deny-by-default reste demontre. Un BSP de
+> production ajouterait ces modules via un fragment de config kernel.
 
 ## Prerequis
 

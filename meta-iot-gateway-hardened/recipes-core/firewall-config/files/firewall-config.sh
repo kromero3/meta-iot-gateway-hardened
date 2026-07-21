@@ -19,8 +19,8 @@ iptables -P OUTPUT ACCEPT
 # Loopback
 iptables -A INPUT -i lo -j ACCEPT
 
-# Connexions deja etablies
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# Connexions deja etablies (utilise -m conntrack, plus recent que -m state)
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # SSH entrant (port 22)
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT

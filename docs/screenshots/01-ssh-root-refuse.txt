@@ -1,0 +1,15 @@
+== TEST 1 : Connexion en tant que 'root' refusee ==
+== (compte root verrouille par 'usermod -L root')  ==
+
+Poky (Yocto Project Reference Distro) 5.0.19 qemux86-64 /dev/ttyS0
+
+qemux86-64 login: root
+Password:
+Login incorrect
+
+qemux86-64 login:
+
+--------------------------------------------------------
+Resultat : 'Login incorrect' -> le compte root est bien
+verrouille, aucun mot de passe ne peut le deverrouiller.
+Mesure de durcissement : EXTRA_USERS_PARAMS ".. usermod -L root ..."

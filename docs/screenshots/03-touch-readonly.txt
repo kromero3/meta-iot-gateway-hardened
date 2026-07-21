@@ -1,0 +1,15 @@
+== TEST 3 : Ecriture a la racine impossible ==
+== (rootfs monte en lecture seule)             ==
+
+qemux86-64:~$ touch /test
+touch: /test: Read-only file system
+qemux86-64:~$
+
+Preuve complementaire au boot :
+[    3.011347] EXT4-fs (vda): re-mounted 0694dcdf-5660-42e2-9a8f-39ddb2978238 r.
+
+--------------------------------------------------------
+Resultat : le kernel monte le rootfs en lecture seule ('r.' final),
+toute tentative d'ecriture est refusee.
+Mesure de durcissement :
+  IMAGE_FEATURES += "read-only-rootfs"

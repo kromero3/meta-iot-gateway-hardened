@@ -19,8 +19,11 @@ iptables -P OUTPUT ACCEPT
 # Loopback
 iptables -A INPUT -i lo -j ACCEPT
 
-# Connexions deja etablies (utilise -m conntrack, plus recent que -m state)
-iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+# Connexions deja etablies : le module xt_conntrack n'est pas compile
+# dans le kernel Yocto par defaut sur qemux86-64. Cette regle est ajoutee
+# uniquement si le module est disponible (fail-safe).
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT 2>/dev/null || \
+    echo "firewall-config: conntrack unavailable, skipping ESTABLISHED rule"
 
 # SSH entrant (port 22)
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT

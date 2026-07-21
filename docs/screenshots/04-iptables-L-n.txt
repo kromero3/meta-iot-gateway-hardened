@@ -1,0 +1,44 @@
+== TEST 4 : Pare-feu iptables actif ==
+== (INPUT policy DROP, script firewall-config au boot) ==
+
+qemux86-64:~$ sudo iptables -L -n
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+For security reasons, the password you type will not be visible.
+
+Password:
+Chain INPUT (policy DROP)
+target     prot opt source               destination
+ACCEPT     0    --  0.0.0.0/0            0.0.0.0/0
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+qemux86-64:~$
+
+--------------------------------------------------------
+Resultat :
+  - INPUT policy DROP  -> tout trafic entrant est bloque par defaut
+  - FORWARD policy DROP -> aucun forwarding autorise
+  - OUTPUT policy ACCEPT -> le systeme peut sortir librement
+  - 1 regle ACCEPT sur INPUT : le trafic loopback (lo)
+
+Mesure de durcissement :
+  IMAGE_INSTALL += "iptables firewall-config sudo"
+  recipe firewall-config_1.0.bb + script init.d/firewall-config.sh
+  (charge par 'inherit update-rc.d' au runlevel S priorite 99)
+
+Note pedagogique : le kernel Yocto qemux86-64 par defaut ne compile
+pas les modules netfilter xt_tcp / xt_conntrack, ce qui limite les
+regles a base de -p tcp --dport et -m conntrack. La policy DROP +
+whitelist explicite (lo) est cependant suffisante pour demontrer le
+mecanisme de durcissement (deny-by-default).
+En production, un BSP dedie ajouterait ces modules au kernel.

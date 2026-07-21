@@ -1,0 +1,16 @@
+== TEST 2 : Connexion 'admin' reussie ==
+== (utilisateur cree via EXTRA_USERS_PARAMS + hash MD5) ==
+
+qemux86-64 login: admin
+Password:
+
+WARNING: Poky is a reference Yocto Project distribution that should be used for
+testing and development purposes only. It is recommended that you create your
+own distribution for production use.
+
+qemux86-64:~$
+
+--------------------------------------------------------
+Resultat : login accepte, shell obtenu sous l'identite 'admin'.
+Mesure de durcissement :
+  EXTRA_USERS_PARAMS "useradd -p '<HASH_MD5>' -G wheel admin;"

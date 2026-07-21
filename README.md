@@ -1,8 +1,6 @@
 # meta-iot-gateway-hardened
 
 **TP de Specialisation — Securite Informatique**
-**Master 2 ESGI — Joffrey Herard (jherard1@myges.fr)**
-**Rendu : 21 juillet 2026 23h59:59 (heure de Paris)**
 
 Layer Yocto (branche **scarthgap**) qui construit une image Linux durcie pour
 une passerelle IoT. L'image `iot-gateway-image` verrouille l'acces distant,

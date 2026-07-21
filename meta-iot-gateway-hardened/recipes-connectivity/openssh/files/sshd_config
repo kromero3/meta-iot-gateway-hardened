@@ -1,0 +1,29 @@
+# sshd_config durci pour la passerelle IoT (Master 2 ESGI - TP Securite)
+# Base sur le sshd_config par defaut d'OpenSSH, avec durcissement.
+
+# --- Hardening principal --------------------------------------------------
+PermitRootLogin no
+PasswordAuthentication yes
+PubkeyAuthentication no
+ChallengeResponseAuthentication no
+UsePAM yes
+
+# --- Reduction de la surface d'attaque -----------------------------------
+X11Forwarding no
+PrintMotd no
+AllowTcpForwarding no
+GatewayPorts no
+PermitTunnel no
+
+# --- Timeouts et limites --------------------------------------------------
+LoginGraceTime 30
+MaxAuthTries 3
+MaxSessions 4
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# --- Locale --------------------------------------------------------------
+AcceptEnv LANG LC_*
+
+# --- SFTP ----------------------------------------------------------------
+Subsystem sftp /usr/libexec/sftp-server

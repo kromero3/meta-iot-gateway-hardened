@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Editeurs / outils
+.claude/
+.vscode/
+.idea/
+
+# Fichiers hors repo (originaux, doublons des documents copies dans docs/)
+/Compte rendu.pdf
+/Rapport_Audit_Securite_IoT_Gateway.pdf
+
+# Ressources de cours / enonces (a ne pas republier)
+/Cours-1.pdf
+/tp0.pdf
+/tp_si.pdf
+
+# Artefacts Yocto (ne devraient pas apparaitre ici mais par securite)
+tmp/
+sstate-cache/
+downloads/
+build*/tmp/
+build*/sstate-cache/
+build*/downloads/
+*.pyc
+__pycache__/

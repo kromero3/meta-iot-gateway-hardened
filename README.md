@@ -206,7 +206,10 @@ ssh root@192.168.7.2
 
 ```bash
 ssh admin@192.168.7.2
-# Mot de passe : admin123
+# Le mot de passe correspondant au hash defini dans
+# meta-iot-gateway-hardened/recipes-core/images/iot-gateway-image.bb
+# (variable EXTRA_USERS_PARAMS). Voir rapport d'audit pour les credentials
+# du build de reference.
 ```
 
 ### Test 3 - Ecriture a la racine (doit **echouer**, rootfs read-only)
@@ -256,11 +259,15 @@ dans [`docs/Rapport_Audit_Securite_IoT_Gateway.pdf`](docs/Rapport_Audit_Securite
 
 ## Notes de portabilite
 
-- Le mot de passe `admin123` presenne dans `iot-gateway-image.bb` est un
-  hash MD5 (`openssl passwd -1`). En production, generer un nouveau hash
-  avec un mot de passe fort et privilegier l'authentification par cle SSH
-  (`PubkeyAuthentication yes` + `PasswordAuthentication no` dans
-  `sshd_config`).
+- Le hash de mot de passe present dans `iot-gateway-image.bb` (variable
+  `EXTRA_USERS_PARAMS`) est un hash MD5 genere avec `openssl passwd -1`
+  pour les besoins du TP. En production :
+  - regenerer un nouveau hash avec un mot de passe fort :
+    `openssl passwd -6 "<mot_de_passe_fort>"` (`-6` = SHA-512),
+  - **desactiver l'authentification par mot de passe** au profit des cles
+    SSH : `PubkeyAuthentication yes` + `PasswordAuthentication no` dans
+    `sshd_config`,
+  - ne jamais committer le hash de production dans un depot public.
 - Le layer cible `qemux86-64` par defaut. Pour une carte reelle, changer
   `MACHINE` dans `local.conf` et ajouter le BSP correspondant a
   `bblayers.conf`.
